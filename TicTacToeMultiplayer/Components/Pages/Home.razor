@@ -1,0 +1,71 @@
+﻿@page "/{PlayerAsString}"
+@page "/"
+@rendermode InteractiveServer
+@using TicTacToe
+
+<PageTitle>TicTacToe</PageTitle>
+
+<h1>Welcome!</h1>
+<h2>You are playing as @_player</h2>
+@if (_gameManager.Game.GameState != Winner.None)
+{
+    <h2 style="font-weight: bold">Winner: @_gameManager.Game.GameState</h2>
+    <p>
+        Restarting in @_gameManager.Countdown seconds.
+    </p>
+}
+else
+{
+    @if (_player == _gameManager.Game.ActivePlayer)
+    {
+        <h2>It's your turn!</h2>
+    }
+    else
+    {
+        <h2>Please wait for your opponent to make a move.</h2>
+    }
+
+    <p>@_info</p>
+}
+
+@for (int row = 0; row < 3; row++)
+{
+    <div class="row-div">
+        @for (int col = 0; col < 3; col++)
+        {
+            int rowCopy = row;
+            int colCopy = col;
+            <div class="box-div" @onclick="_ => move(rowCopy, colCopy)">
+                @_gameManager.Game[row, col].GetAsString()
+            </div>
+        }
+    </div>
+}
+
+<!--suppress CssUnresolvedCustomProperty -->
+<style>
+    :root {
+        --box-size: 10vw;
+    }
+
+    .row-div {
+        margin: 0;
+        display: flex;
+    }
+
+    .box-div {
+        width: var(--box-size);
+        height: var(--box-size);
+        border: 1px solid black;
+
+        font-size: calc(var(--box-size) / 2);
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        cursor: pointer;
+        user-select: none;
+    }
+
+</style>

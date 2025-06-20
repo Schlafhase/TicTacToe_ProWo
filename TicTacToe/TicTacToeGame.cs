@@ -9,6 +9,8 @@ public class TicTacToeGame
 
     public GridEntry ActivePlayer { get; private set; } = GridEntry.X;
     public Winner GameState { get; private set; } = Winner.None;
+    public event Action? GameOver;
+    public event Action? OnMove;
 
     /// <summary>
     ///     2D indexer for accessing the <see cref="_grid" />
@@ -49,6 +51,7 @@ public class TicTacToeGame
 
         this[row, column] = ActivePlayer;
         toggleActivePlayer();
+        OnMove?.Invoke();
         checkForWin();
     }
 
@@ -69,6 +72,7 @@ public class TicTacToeGame
 
             if (GameState != Winner.None)
             {
+                GameOver?.Invoke();
                 return;
             }
         }
@@ -80,6 +84,7 @@ public class TicTacToeGame
 
             if (GameState != Winner.None)
             {
+                GameOver?.Invoke();
                 return;
             }
         }
@@ -88,18 +93,21 @@ public class TicTacToeGame
         GameState = returnIfEqual(this[0, 0], this[1, 1], this[2, 2]);
         if (GameState != Winner.None)
         {
+            GameOver?.Invoke();
             return;
         }
         
         GameState = returnIfEqual(this[0, 2], this[1, 1], this[2, 0]);
         if (GameState != Winner.None)
         {
+            GameOver?.Invoke();
             return;
         }
         
         // Check for draw
         if (!_grid.Contains(GridEntry.None))
         {
+            GameOver?.Invoke();
             GameState = Winner.Draw;
         }
     }
