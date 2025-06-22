@@ -1,3 +1,5 @@
+using System.Text;
+
 namespace TicTacToe;
 
 public class TicTacToeGame
@@ -5,27 +7,28 @@ public class TicTacToeGame
     /// <summary>
     ///     Array to store the current game state.
     /// </summary>
-    private readonly GridEntry[] _grid = Enumerable.Repeat(GridEntry.None, 9).ToArray();
+    private readonly GridEntry[][] _grid;
 
     public GridEntry ActivePlayer { get; private set; }
     public Winner GameState { get; private set; } = Winner.None;
-    
-    private readonly Random _random = new Random();
 
-    /// <summary>
-    ///     2D indexer for accessing the <see cref="_grid" />
-    /// </summary>
-    /// <param name="row">The row to read from/write to</param>
-    /// <param name="column">The column to read from/write to</param>
-    public GridEntry this[int row, int column]
-    {
-        get => _grid[3 * row + column];
-        private set => _grid[3 * row + column] = value;
-    }
+    private readonly Random _random = new Random();
+    public GridEntry[][] Grid => _grid;
 
     public TicTacToeGame()
     {
         ActivePlayer = _random.Next(2) == 0 ? GridEntry.O : GridEntry.X;
+
+        _grid = new GridEntry[3][];
+
+        for (int row = 0; row < 3; row++)
+        {
+            _grid[row] = new GridEntry[3];
+            for (int col = 0; col < 3; col++)
+            {
+                _grid[row][col] = GridEntry.None;
+            }
+        }
     }
 
     /// <summary>
@@ -43,18 +46,18 @@ public class TicTacToeGame
         {
             throw new InvalidOperationException("Game has ended");
         }
-        
+
         if (row > 2 || column > 2 || row < 0 || column < 0)
         {
             throw new ArgumentException("Row and Column are out of range.");
         }
 
-        if (this[row, column] != GridEntry.None)
+        if (_grid[row][column] != GridEntry.None)
         {
             throw new ArgumentException("Cell is occupied.");
         }
 
-        this[row, column] = ActivePlayer;
+        _grid[row][column] = ActivePlayer;
         toggleActivePlayer();
         checkForWin();
     }
@@ -69,49 +72,64 @@ public class TicTacToeGame
     /// </summary>
     private void checkForWin()
     {
+        GameState = CheckForWin(_grid);
+    }
+
+    public static Winner CheckForWin(GridEntry[][] board)
+    {
+        Winner winner;
+
         // Check rows
         for (int row = 0; row < 3; row++)
         {
-            GameState = returnIfEqual(this[row, 0], this[row, 1], this[row, 2]);
+            winner = returnIfEqual(board[row][0], board[row][1], board[row][2]);
 
-            if (GameState != Winner.None)
+            if (winner != Winner.None)
             {
-                return;
+                return winner;
             }
         }
-        
+
         // Check columns
         for (int column = 0; column < 3; column++)
         {
-            GameState = returnIfEqual(this[0, column], this[1, column], this[2, column]);
+            winner = returnIfEqual(board[0][column], board[1][column], board[2][column]);
 
-            if (GameState != Winner.None)
+            if (winner != Winner.None)
             {
-                return;
+                return winner;
             }
         }
-        
+
         // Check diagonal
-        GameState = returnIfEqual(this[0, 0], this[1, 1], this[2, 2]);
-        if (GameState != Winner.None)
+        winner = returnIfEqual(board[0][0], board[1][1], board[2][2]);
+        if (winner != Winner.None)
         {
-            return;
+            return winner;
         }
-        
-        GameState = returnIfEqual(this[0, 2], this[1, 1], this[2, 0]);
-        if (GameState != Winner.None)
+
+        winner = returnIfEqual(board[0][2], board[1][1], board[2][0]);
+        if (winner != Winner.None)
         {
-            return;
+            return winner;
         }
-        
+
         // Check for draw
-        if (!_grid.Contains(GridEntry.None))
+        bool hasEmptyCells = false;
+
+        for (int row = 0; row < 3; row++)
         {
-            GameState = Winner.Draw;
+            if (board[row].Contains(GridEntry.None))
+            {
+                hasEmptyCells = true;
+                break;
+            }
         }
+
+        return hasEmptyCells ? Winner.None : Winner.Draw;
     }
 
-    private Winner returnIfEqual(GridEntry a, GridEntry b, GridEntry c)
+    private static Winner returnIfEqual(GridEntry a, GridEntry b, GridEntry c)
     {
         if (a == b && b == c)
         {
@@ -125,6 +143,34 @@ public class TicTacToeGame
         }
 
         return Winner.None;
+    }
+
+    public string GetAsString()
+    {
+        StringBuilder sb = new StringBuilder();
+
+        sb.Append("  1 2 3");
+        sb.AppendLine();
+
+        for (int row = 0; row < 3; row++)
+        {
+            sb.Append($"{row + 1} ");
+            for (int col = 0; col < 3; col++)
+            {
+                GridEntry cell = _grid[row][col];
+                string value = cell switch
+                {
+                    GridEntry.X => "X ",
+                    GridEntry.O => "O ",
+                    _ => "  "
+                };
+                sb.Append(value);
+            }
+
+            sb.AppendLine();
+        }
+
+        return sb.ToString();
     }
 }
 

@@ -25,7 +25,8 @@ else
             int rowCopy = row;
             int colCopy = col;
             <div class="box-div" @onclick="_ => move(rowCopy, colCopy)">
-                @_game[row, col].GetAsString()
+                @(_game.Grid[row][col] == GridEntry.X ? "X " : 
+                    (_game.Grid[row][col] == GridEntry.O ? "O " : "  "))
             </div>
         }
     </div>
