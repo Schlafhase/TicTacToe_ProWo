@@ -10,9 +10,7 @@
 @if (_gameManager.Game.GameState != Winner.None)
 {
     <h2 style="font-weight: bold">Winner: @_gameManager.Game.GameState</h2>
-    <p>
-        Restarting in @_gameManager.Countdown seconds.
-    </p>
+    <button @onclick="_gameManager.NewGame">Restart</button>
 }
 else
 {

@@ -9,9 +9,7 @@
 @if (_game.GameState != Winner.None)
 {
     <h2 style="font-weight: bold">Winner: @_game.GameState</h2>
-    <p>
-        Reload the website to play again.
-    </p>
+    <button @onclick="_ => _game = new()">Restart</button>
 }
 else
 {

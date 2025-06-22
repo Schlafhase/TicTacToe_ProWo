@@ -1,45 +1,20 @@
+using System.Timers;
 using TicTacToe;
+using Timer = System.Timers.Timer;
 
 namespace TicTacToeMultiplayer;
 
-public sealed class GameManager : IDisposable
+public sealed class GameManager
 {
     public required TicTacToeGame Game;
-    public int Countdown;
-    public event Action? CountdownChanged;
-    public event Action? OnMove;
-    public event Action? OnReset;
 
     public GameManager()
     {
-        newGame();
+        NewGame();
     }
-    
-    private void newGame()
+
+    public void NewGame()
     {
         Game = new TicTacToeGame();
-        Game.GameOver += onGameOver;
-        Game.OnMove += () => OnMove?.Invoke();
-        OnReset?.Invoke();
-    }
-
-    private void onGameOver()
-    {
-        new Thread(() =>
-        {
-            for (int i = 5; i > 0; i--)
-            {
-                Countdown = i;
-                CountdownChanged?.Invoke();
-                Thread.Sleep(1000);
-            }
-            newGame();
-        }).Start();
-    }
-
-
-    public void Dispose()
-    {
-        Game.GameOver -= onGameOver;
     }
 }

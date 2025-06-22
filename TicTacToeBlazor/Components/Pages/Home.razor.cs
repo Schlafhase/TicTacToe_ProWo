@@ -5,7 +5,7 @@ namespace TicTacToeBlazor.Components.Pages;
 
 public partial class Home : ComponentBase
 {
-    private readonly TicTacToeGame _game = new TicTacToeGame();
+    private TicTacToeGame _game = new TicTacToeGame();
     private string _info = string.Empty;
 
     private void move(int row, int column)
