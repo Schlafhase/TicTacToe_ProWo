@@ -5,7 +5,7 @@ using TicTacToeWithAI;
 
 Console.WriteLine("Welcome to TicTacToe");
 
-TicTacToeGame game = new TicTacToeGame();
+TicTacToeGame game = new();
 
 while (game.GameState == Winner.None)
 {
@@ -15,19 +15,19 @@ while (game.GameState == Winner.None)
     {
         Console.WriteLine("It's the AI's turn!");
         (int row, int col) bestMove = TicTacToeAI.GetBestMove(game.Grid, game.ActivePlayer);
-        
+
         game.Move(bestMove.row, bestMove.col);
-        
+
         continue;
     }
-    
-    Console.WriteLine($"It's your turn!");
+
+    Console.WriteLine("It's your turn!");
     Console.WriteLine("Please enter the coordinates you want to play (seperated by a space):");
     string coordinates = Console.ReadLine()!;
 
     int x;
     int y;
-    
+
     try
     {
         x = int.Parse(coordinates.Split(' ')[0]);

@@ -40,7 +40,7 @@ public static class TicTacToeAI
 
     public static string GetAsString(GridEntry[][] board)
     {
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new();
 
         sb.Append("  1 2 3");
         sb.AppendLine();
@@ -103,7 +103,7 @@ public static class TicTacToeAI
                     }
 
                     board[row][col] = aiSymbol;
-                    int score = miniMax(board, aiSymbol, depth + 1, false);
+                    int score = miniMax(board, aiSymbol, depth + 1);
                     board[row][col] = GridEntry.None;
                     bestScore = Math.Max(bestScore, score); // Higher score = better
                 }
@@ -142,7 +142,7 @@ public static class TicTacToeAI
         {
             GridEntry.O => GridEntry.X,
             GridEntry.X => GridEntry.O,
-            _ => GridEntry.None,
+            _ => GridEntry.None
         };
     }
 }

@@ -1,6 +1,6 @@
 ﻿@page "/"
-@rendermode InteractiveServer
 @using TicTacToe
+@rendermode InteractiveServer
 
 <PageTitle>TicTacToe</PageTitle>
 
@@ -9,7 +9,7 @@
 @if (_game.GameState != Winner.None)
 {
     <h2 style="font-weight: bold">Winner: @_game.GameState</h2>
-    <button @onclick="_ => _game = new()">Restart</button>
+    <button @onclick="_ => _game = new TicTacToeGame()">Restart</button>
 }
 else
 {
@@ -25,8 +25,7 @@ else
             int rowCopy = row;
             int colCopy = col;
             <div class="box-div" @onclick="_ => move(rowCopy, colCopy)">
-                @(_game.Grid[row][col] == GridEntry.X ? "X " : 
-                    (_game.Grid[row][col] == GridEntry.O ? "O " : "  "))
+                @(_game.Grid[row][col] == GridEntry.X ? "X " : _game.Grid[row][col] == GridEntry.O ? "O " : "  ")
             </div>
         }
     </div>

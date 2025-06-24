@@ -1,6 +1,4 @@
-using System.Timers;
 using TicTacToe;
-using Timer = System.Timers.Timer;
 
 namespace TicTacToeMultiplayer;
 

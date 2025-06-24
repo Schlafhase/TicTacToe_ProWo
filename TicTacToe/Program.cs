@@ -4,18 +4,21 @@ using TicTacToe;
 
 Console.WriteLine("Welcome to TicTacToe");
 
-TicTacToeGame game = new TicTacToeGame();
+// Neues TicTacToe-Spiel
+TicTacToeGame game = new();
 
+// Solange das Spiel nicht gewonnen ist
 while (game.GameState == Winner.None)
 {
     Console.WriteLine(game.GetAsString());
     Console.WriteLine($"It's Player {game.ActivePlayer}'s turn!");
     Console.WriteLine("Please enter the coordinates you want to play (seperated by a space):");
+    // Aus der Konsole lesen
     string coordinates = Console.ReadLine()!;
 
     int x;
     int y;
-    
+
     try
     {
         x = int.Parse(coordinates.Split(' ')[0]);

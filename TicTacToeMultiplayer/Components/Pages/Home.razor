@@ -1,7 +1,7 @@
 ﻿@page "/{PlayerAsString}"
 @page "/"
-@rendermode InteractiveServer
 @using TicTacToe
+@rendermode InteractiveServer
 
 <PageTitle>TicTacToe</PageTitle>
 
@@ -34,8 +34,7 @@ else
             int rowCopy = row;
             int colCopy = col;
             <div class="box-div" @onclick="_ => move(rowCopy, colCopy)">
-                @(_gameManager.Game.Grid[row][col] == GridEntry.X ? "X " : 
-                    (_gameManager.Game.Grid[row][col] == GridEntry.O ? "O " : "  "))
+                @(_gameManager.Game.Grid[row][col] == GridEntry.X ? "X " : _gameManager.Game.Grid[row][col] == GridEntry.O ? "O " : "  ")
             </div>
         }
     </div>
